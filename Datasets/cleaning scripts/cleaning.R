@@ -28,9 +28,11 @@ for (col in names(nonOpiates))
 }
 temp$b <- as.numeric(as.character(temp$b))
 
-temp <- filter(temp, temp$b < mean(temp$b))
+temp <- temp[order(temp$b), ]
+temp <- temp[1:11,]
 
-garbageNames <- temp$a
+
+garbageNames <- names(nonOpiates)[!(names(nonOpiates) %in% temp$a)]
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% garbageNames]
 
 ##Write a cleaned CSV
