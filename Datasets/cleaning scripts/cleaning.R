@@ -10,7 +10,7 @@ opioids <- gsub("\ |-",".",opioids) # replace hyphens and spaces with periods to
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% opioids]
 
 #Remove useless columns, col count = 242/256
-header <- c("Gender", "NPI", "Credentials")
+header <- c("State", "Specialty", "Gender", "NPI", "Credentials")
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% header]
 
 #Select drugs with highest frequency
