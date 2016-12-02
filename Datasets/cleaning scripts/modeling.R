@@ -1,5 +1,9 @@
 library(caret)
 
+for (col in names(prescriberInfo)) {
+  prescriberInfo[col] <- factor(ifelse(prescriberInfo[col]==0, 0, 1))
+}
+
 prescriberInfo$Opioid.Prescriber <- factor(ifelse(prescriberInfo$Opioid.Prescriber==0, "Zero", "One"))
 
 inTraining <- createDataPartition(y=prescriberInfo$Opioid.Prescriber, p = 0.75, list = FALSE)
@@ -10,6 +14,7 @@ testing <- prescriberInfo[-inTraining,]
 myControl <- trainControl(method="CV", number=10, classProbs=TRUE);
 
 set.seed(825)
+
 randomForest <- train(Opioid.Prescriber ~ ., 
                       data=training, 
                       method="ranger", 
@@ -17,19 +22,30 @@ randomForest <- train(Opioid.Prescriber ~ .,
                       verbose=FALSE)
 randomForest
 
+nb <- train(Opioid.Prescriber ~ .,
+            data=training,
+            method="nb",
+            trControl=myControl,
+            verbose=FALSE)
+
+nb
+
 svm <- train(Opioid.Prescriber~.,
              data=training,
              method="svmRadial",
              trControl=myControl,
              verbose=FALSE)
-#svm
+svm
 
-#predSVM <- predict(svm, newdata=head(testing), type="prob")
+predSVM <- predict(svm, newdata=head(testing), type="prob")
 predForest <- predict(randomForest, newdata=head(testing))
+predNB <- predict(nb, newdata=head(testing))
 
-#predSVM
+predSVM
 predForest
+predNB
 
 forestMatrix <- confusionMatrix(randomForest, norm = "none")
 svmMatrix <- confusionMatrix(svm, norm = "none")
+nbMatrix <- confusionMatrix(nb, norm = "none")
 

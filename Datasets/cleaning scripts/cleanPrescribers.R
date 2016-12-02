@@ -31,6 +31,10 @@ temp$b <- as.numeric(as.character(temp$b))
 temp <- temp[order(temp$b), ]
 temp <- temp[1:11,]
 
+# Uncomment if >1 = 1
+#for (col in names(temp)) {
+#  prescriberInfo[col] <- ifelse(col, as.numeric(prescriberInfo[col])==0, 0, 1)
+#}
 
 garbageNames <- names(nonOpiates)[!(names(nonOpiates) %in% temp$a)]
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% garbageNames]
