@@ -29,7 +29,7 @@ for (col in names(nonOpiates))
 temp$b <- as.numeric(as.character(temp$b))
 
 temp <- temp[order(temp$b), ]
-temp <- temp[1:11,]
+temp <- temp[1:20,]
 
 # Uncomment if >1 = 1
 #for (col in names(temp)) {
