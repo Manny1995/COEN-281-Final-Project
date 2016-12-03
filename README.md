@@ -7,9 +7,16 @@ COEN 281 final project.  On Opioid analysis
 For our models, we utilized 10 fold cross validation.
 
 ###Naive Bayes
+
+###Criteria
+
  Criteria | Value
  --- | ---
- Accuracy | 100
+ Accuracy (average) | 0.6218
+
+ Criteria | Value
+ --- | ---
+ Accuracy (average) | 0.5042
 
 
 ####Confusion Matrix
@@ -19,22 +26,35 @@ For our models, we utilized 10 fold cross validation.
  Yes | 1982 | 263
  No | 9034 | 7471 
  
-- Accuracy (average) : 0.5042
 
 
 ###Random Forest
 
 ####Confusion Matrix
 
+###Criteria
+
+ Criteria | Value
+ --- | ---
+ Accuracy (average) | 0.6218
+
+
  | Yes | No
 --- | --- | ---
 Yes | 10794 | 6869
 No | 222 | 865
 
-- Accuracy (average) : 0.6218
+
 
       
 ###SVM
+
+###Criteria
+ 
+ Criteria | Value
+ --- | ---
+ Accuracy (average) | 0.6125
+ 
 
 ####Confusion Matrix
 
@@ -44,7 +64,7 @@ No | 222 | 865
  No | 228 | 866
  
  
-- Accuracy (average) : 0.6125 
+
 
 
 
