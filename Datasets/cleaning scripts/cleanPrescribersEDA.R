@@ -91,4 +91,4 @@ total$Specialty <- droplevels(total$Specialty)
 
 names(total)[which(names(total) == "V1")] <- "StateNumber"
 
-write.csv(prescriberInfo, "../clean/aggregatedInfo-clean.csv")
+write.csv(total, "../clean/aggregatedInfo-clean.csv")
