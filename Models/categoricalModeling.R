@@ -1,8 +1,11 @@
 library(caret)
 
-for (col in names(prescriberInfo)) {
-  prescriberInfo[col] <- factor(ifelse(prescriberInfo[col]==0, 0, 1))
-}
+
+
+prescriberInfo <- data.frame(read.csv("../Datasets/clean/prescriber-info-categorical-cleaned.csv", stringsAsFactors=FALSE))
+
+names <- c('Specialty', 'Gender', 'State', 'Opioid.Prescriber')
+names <- c('NumSpeciality', 'NumGender', 'NumState', 'Opioid.Prescriber')
 
 prescriberInfo$Opioid.Prescriber <- factor(ifelse(prescriberInfo$Opioid.Prescriber==0, "Zero", "One"))
 
@@ -15,37 +18,40 @@ myControl <- trainControl(method="CV", number=10, classProbs=TRUE);
 
 set.seed(825)
 
-randomForest <- train(Opioid.Prescriber ~ ., 
+dummies <- dummyVars(Opioid.Prescriber ~ ., data = prescriberInfo)
+head(predict(dummies, newdata = presciberInfo))
+
+randomForest2 <- train(Opioid.Prescriber ~ ., 
                       data=training, 
                       method="ranger", 
                       trControl=myControl,
                       verbose=FALSE)
-randomForest
+randomForest2
 
-nb <- train(Opioid.Prescriber ~ .,
+nb2 <- train(Opioid.Prescriber ~ .,
             data=training,
             method="nb",
             trControl=myControl,
             verbose=FALSE)
 
-nb
+nb2
 
-svm <- train(Opioid.Prescriber~.,
+svm2 <- train(Opioid.Prescriber~.,
              data=training,
              method="svmRadial",
              trControl=myControl,
              verbose=FALSE)
-svm
+svm2
 
-predSVM <- predict(svm, newdata=head(testing), type="prob")
-predForest <- predict(randomForest, newdata=head(testing))
-predNB <- predict(nb, newdata=head(testing))
+predSVM <- predict(svm2, newdata=head(testing), type="prob")
+predForest <- predict(randomForest2, newdata=head(testing))
+predNB <- predict(nb2, newdata=head(testing))
 
 predSVM
 predForest
 predNB
 
-forestMatrix <- confusionMatrix(randomForest, norm = "none")
-svmMatrix <- confusionMatrix(svm, norm = "none")
-nbMatrix <- confusionMatrix(nb, norm = "none")
+forestMatrix2 <- confusionMatrix(randomForest2, norm = "none")
+svmMatrix2 <- confusionMatrix(svm2, norm = "none")
+nbMatrix2 <- confusionMatrix(nb2, norm = "none")
 

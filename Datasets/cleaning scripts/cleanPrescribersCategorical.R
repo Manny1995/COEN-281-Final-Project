@@ -1,3 +1,22 @@
+# The cleaned script can be found in Datasets/clean/prescriber-info-categorical-cleaned.csv
+
+# This script is designated to provide a CSV which we can use for modeling
+
+# The data cleaning done:
+# Remove all categorical variables, ie State, Gender, etc.
+# Remove all opiates.
+# Select the top 10 most frequently prescribed non-opiates
+# Each column is a binary variable - either prescribed the drug or did not
+
+# The resulting CSV contains the following columns
+# State  
+# Credentials 
+# Specialty    
+# Opioid.Prescriber <- The class we are trying to predict
+
+# Clear workspace
+rm(list=ls())
+
 #Read the prescriber info and save into data frame
 prescriberInfo <- data.frame(read.csv("../raw/prescriber-info.csv", stringsAsFactors=FALSE))
 
@@ -9,14 +28,13 @@ opioids <- gsub("\ |-",".",opioids) # replace hyphens and spaces with periods to
 #Remove all opioids, col count = 245/256
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% opioids]
 
-#Remove useless columns, col count = 242/256
-#header <- c("State", "Specialty", "Gender", "NPI", "Credentials")
-#prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% header]
-
 #Select drugs with highest frequency
-
 filterNumerical = c("Specialty", "Credentials", "State", "Opioid.Prescriber")
 prescriberInfo <- prescriberInfo[, names(prescriberInfo) %in% filterNumerical]
+
+#Select drugs with highest frequency
+filterNumerical = c("Gender", "Specialty", "NPI", "Credentials", "State", "Speciality", "Opioid.Prescriber")
+nonOpiates <- prescriberInfo[, !names(prescriberInfo) %in% filterNumerical]
 colSums(nonOpiates)
 
 
@@ -40,4 +58,4 @@ garbageNames <- names(nonOpiates)[!(names(nonOpiates) %in% temp$a)]
 prescriberInfo <- prescriberInfo[, !names(prescriberInfo) %in% garbageNames]
 
 ##Write a cleaned CSV
-write.csv(prescriberInfo, "../clean/prescriber-info-cleaned.csv")
+write.csv(prescriberInfo, "../clean/prescriber-info-categorical-cleaned.csv", row.names=FALSE)

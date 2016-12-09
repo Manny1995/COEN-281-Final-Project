@@ -1,3 +1,25 @@
+# The cleaned script can be found in Datasets/clean/aggregatedInfo-clean.csv
+
+# This script is designated to provide a CSV which we can use for our EDA done in Python.  It does the following:
+  # It joins opioids.csv and overdoses-cleaned.csv
+  # It takes the categorical variables and converts them into numerical values.
+
+# The data cleaning done:
+  # Filters out states that have small values, ie Guam, and other territories.
+
+# The resulting CSV contains the following columns
+  # State
+  # Gender
+  # Specialty
+  # Opioid.Prescriber (Class we are trying to predict)
+  # NumGender <- Numerical value of Gender
+  # NumSpecialty <- Numerical value of Specialty
+  # StateNumber <- Numerical value of State.Name
+  # State.Name
+  # Population
+  # Deaths
+
+
 library(dplyr)
 library(magrittr)
 library(ggplot2)
@@ -7,10 +29,12 @@ library(lme4)
 library(caret)
 
 
-limit.rows <- 25000
-oldCategoricalInfo <- data.frame(fread("../raw/prescriber-info.csv",nrows=limit.rows))
-categoricalInfo <- data.frame(fread("../raw/prescriber-info.csv",nrows=limit.rows))
+# Clear workspace
+rm(list=ls())
 
+limit.rows <- 25000
+
+categoricalInfo <- data.frame(fread("../raw/prescriber-info.csv",nrows=limit.rows))
 overdoses <- data.frame(fread("../clean/overdoses-cleaned.csv",nrows=limit.rows))
 
 opioids <- read.csv("../raw/opioids.csv")
@@ -41,7 +65,6 @@ levels(categoricalInfo$State) <- c(levels(categoricalInfo$State),"other")
 categoricalInfo$State[categoricalInfo$State %in% rare.abbrev$State] <- "other"
 
 #categoricalInfo$State <- droplevels(categoricalInfo$State)
-
 
 
 # Get the common specialties, we won't change those
@@ -91,4 +114,4 @@ total$Specialty <- droplevels(total$Specialty)
 
 names(total)[which(names(total) == "V1")] <- "StateNumber"
 
-write.csv(total, "../clean/aggregatedInfo-clean.csv")
+write.csv(total, "../clean/aggregated-info-clean.csv", row.names=FALSE)
